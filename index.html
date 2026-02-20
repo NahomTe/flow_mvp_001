@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Hub</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050505;
+      --card-bg: #111111;
+      --accent: #3b82f6; 
+      --accent-glow: rgba(59, 130, 246, 0.3);
+      --text-main: #ffffff;
+      --text-dim: #888888;
+      
+      /* Subject Colors */
+      --color-math: #3b82f6;   /* Blue */
+      --color-ent: #f59e0b;    /* Orange */
+      --color-tech: #8b5cf6;   /* Purple */
+      --color-eng: #10b981;    /* Green */
+      --color-civ: #14b8a6;    /* Teal */
+      --color-ant: #ec4899;    /* Pink */
+      --color-inc: #ef4444;    /* Red */
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      padding: 16px;
+      line-height: 1.5;
+      padding-bottom: 60px; /* Extra space at bottom for easy scrolling */
+    }
+
+    /* COUNTDOWN SECTION */
+    .countdown-card {
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(0, 0, 0, 0));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      box-shadow: 0 0 20px var(--accent-glow);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .countdown-card h1 { 
+      font-size: 40px; 
+      margin: 0; 
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    
+    .countdown-card p {
+      color: var(--text-dim);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+
+    /* SCHEDULE CONTAINER */
+    .schedule-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .day-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    /* STICKY HEADERS */
+    .day-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 0;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 4px;
+    }
+
+    .today-badge {
+      display: none;
+      font-size: 11px;
+      background: var(--accent);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .day-section.is-today .today-badge {
+      display: block;
+    }
+    
+    .day-section.is-today .day-header {
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+    }
+
+    /* CLASS CARDS */
+    .class-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .class-card h4 { 
+      margin: 0; 
+      font-size: 16px; 
+      font-weight: 600;
+    }
+
+    .class-info { 
+      font-size: 14px; 
+      color: var(--text-dim); 
+      display: flex; 
+      align-items: center;
+      gap: 6px; 
+    }
+
+    /* SUBJECT COLOR CODING */
+    .subj-math { border-left: 4px solid var(--color-math); }
+    .subj-ent { border-left: 4px solid var(--color-ent); }
+    .subj-tech { border-left: 4px solid var(--color-tech); }
+    .subj-eng { border-left: 4px solid var(--color-eng); }
+    .subj-civ { border-left: 4px solid var(--color-civ); }
+    .subj-ant { border-left: 4px solid var(--color-ant); }
+    .subj-inc { border-left: 4px solid var(--color-inc); }
+
+    .empty-day {
+      background: transparent;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: var(--text-dim);
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-card" id="countdownCard">
+    <h1 id="daysLeft">-- DAYS</h1>
+    <p>Until Final Exam</p>
+  </div>
+
+  <!-- SCHEDULE LIST -->
+  <div class="schedule-container">
+    
+    <!-- MONDAY -->
+    <div class="day-section" data-day="1">
+      <div class="day-header">
+        Monday <span class="today-badge">Today</span>
+      </div>
+      <div class="class-card subj-math">
+        <h4>Applied Mathematics</h4>
+        <div class="class-info">🕒 08:30 AM</div>
+      </div>
+      <div class="class-card subj-ent">
+        <h4>Enterpnereship</h4>
+        <div class="class-info">🕒 10:30 AM</div>
+      </div>
+      <div class="class-card subj-tech">
+        <h4>Emerging Technology</h4>
+        <div class="class-info">🕒 01:00 PM</div>
+      </div>
+    </div>
+
+    <!-- TUESDAY -->
+    <div class="day-section" data-day="2">
+      <div class="day-header">
+        Tuesday <span class="today-badge">Today</span>
+      </div>
+      <div class="class-card subj-eng">
+        <h4>English</h4>
+        <div class="class-info">🕒 08:30 AM</div>
+      </div>
+      <div class="class-card subj-civ">
+        <h4>Civics and Moral</h4>
+        <div class="class-info">🕒 10:30 AM</div>
+      </div>
+      <div class="class-card subj-ant">
+        <h4>Antropology</h4>
+        <div class="class-info">🕒 01:00 PM</div>
+      </div>
+      <div class="class-card subj-inc">
+        <h4>Inclussiveness</h4>
+        <div class="class-info">🕒 03:00 PM</div>
+      </div>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="day-section" data-day="3">
+      <div class="day-header">
+        Wednesday <span class="today-badge">Today</span>
+      </div>
+      <div class="empty-day">
+        ☕ No classes scheduled today
+      </div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="day-section" data-day="4">
+      <div class="day-header">
+        Thursday <span class="today-badge">Today</span>
+      </div>
+      <div class="class-card subj-math">
+        <h4>Applied Mathematics</h4>
+        <div class="class-info">🕒 08:30 AM</div>
+      </div>
+      <div class="class-card subj-eng">
+        <h4>English</h4>
+        <div class="class-info">🕒 01:00 PM</div>
+      </div>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="day-section" data-day="5">
+      <div class="day-header">
+        Friday <span class="today-badge">Today</span>
+      </div>
+      <div class="class-card subj-tech">
+        <h4>Emerging Technology</h4>
+        <div class="class-info">🕒 08:30 AM</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. FINAL EXAM COUNTDOWN LOGIC
+    const examDate = new Date("2026-06-01T09:00:00"); // Change to actual date
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = examDate - now;
+      
+      if (diff <= 0) { 
+        document.getElementById("daysLeft").textContent = "EXAM DAY"; 
+        return; 
+      }
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById("daysLeft").textContent = `${days} DAYS`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // 2. AUTO-SCROLL & HIGHLIGHT TODAY
+    function highlightAndScrollToday() {
+      const today = new Date().getDay(); // 0 = Sun, 1 = Mon, etc.
+      
+      // Find the section for today
+      const todaySection = document.querySelector(`.day-section[data-day="${today}"]`);
+      
+      if (todaySection) {
+        // Add highlight styling
+        todaySection.classList.add('is-today');
+        
+        // Wait just a moment for Telegram WebApp to fully render, then scroll
+        setTimeout(() => {
+          todaySection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }, 300);
+      }
+    }
+
+    // 3. TELEGRAM INITIALIZATION
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      
+      // Set the header color of Telegram to match our dark background
+      window.Telegram.WebApp.setHeaderColor('#050505');
+      window.Telegram.WebApp.setBackgroundColor('#050505');
+    }
+
+    // Run layout logic when DOM loads
+    document.addEventListener("DOMContentLoaded", highlightAndScrollToday);
+  </script>
+</body>
+</html>
